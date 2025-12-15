@@ -121,13 +121,21 @@ def main():
     ax1.grid(True, which="both", ls="--")
 
     # Gráfico 2: Pico de Uso de Memória
-    ax2.plot(site_counts, scipy_mem, 'o-', label='Fortune (SciPy)')
-    ax2.plot(site_counts, bw_mem, 's-', label='Bowyer-Watson (Cython)')
+    line_mem1, = ax2.plot(site_counts, scipy_mem, 'o-', label='Fortune (SciPy)')
+    line_mem2, = ax2.plot(site_counts, bw_mem, 's-', label='Bowyer-Watson (Cython)')
     ax2.set_title('Pico de Uso de Memória vs. Número de Sítios')
     ax2.set_xlabel('Número de Sítios')
     ax2.set_ylabel('Memória (MB)')
     ax2.legend()
     ax2.grid(True)
+    
+    # Adiciona rótulos de texto para a linha Fortune (em baixo)
+    for i, txt in enumerate(scipy_mem):
+        ax2.annotate(f'{txt:.2f}', (site_counts[i], scipy_mem[i]), textcoords="offset points", xytext=(0,-10), ha='center', va='top', color=line_mem1.get_color())
+
+    # Adiciona rótulos de texto para a linha Bowyer-Watson (em cima)
+    for i, txt in enumerate(bw_mem):
+        ax2.annotate(f'{txt:.2f}', (site_counts[i], bw_mem[i]), textcoords="offset points", xytext=(0,10), ha='center', va='bottom', color=line_mem2.get_color())
     
     fig1.tight_layout(rect=[0, 0.03, 1, 0.95], h_pad=3)
 
