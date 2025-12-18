@@ -167,15 +167,22 @@ def main():
     ax_bw.set_title('Bowyer-Watson (Cython)')
     ax_bw.axis('equal')
     
-    # Sincronizar limites com o gráfico do SciPy para comparação justa
-    xlim = ax_scipy.get_xlim()
-    ylim = ax_scipy.get_ylim()
-    ax_bw.set_xlim(xlim)
-    ax_bw.set_ylim(ylim)
+    # Definir limites baseados nos pontos reais (com margem de 5%) para garantir visualização correta
+    min_x, max_x = np.min(last_points[:, 0]), np.max(last_points[:, 0])
+    min_y, max_y = np.min(last_points[:, 1]), np.max(last_points[:, 1])
     
-    # Se os limites forem muito pequenos ou inválidos, usar auto-ajuste baseados nos pontos
-    if xlim[0] == xlim[1] or ylim[0] == ylim[1]:
-         ax_bw.autoscale()
+    margin_x = (max_x - min_x) * 0.05
+    margin_y = (max_y - min_y) * 0.05
+    
+    final_xlim = (min_x - margin_x, max_x + margin_x)
+    final_ylim = (min_y - margin_y, max_y + margin_y)
+    
+    # Aplicar limites forçados em ambos os gráficos
+    ax_scipy.set_xlim(final_xlim)
+    ax_scipy.set_ylim(final_ylim)
+    
+    ax_bw.set_xlim(final_xlim)
+    ax_bw.set_ylim(final_ylim)
 
     ax_bw.set_xticks([])
     ax_bw.set_yticks([])
